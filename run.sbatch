@@ -19,4 +19,4 @@ module load Anaconda3/5.0.1 cuda/9.0
 source activate z11
 
 # GPU-based executable:
-python train_cnn.py -t ./data/train.csv -l ./log.csv -i ./weights/w1.h5 -o ./weights/w1.h5 -e 2 -b 128 -n 10
+python train_cnn.py -t ./data/train.csv -l ./log.csv -i ./weights/w1.h5 -o ./weights/w1.h5 -e 100 -b 256 -n 10
