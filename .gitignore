@@ -2,4 +2,9 @@
 **/**.pyc
 **/**.csv
 .vscode/settings.json
-*.pyc
+.idea/*
+**/*.pyc
+**/*.xml
+**/*.iml
+**/*.csv
+tensorboard_unet/*

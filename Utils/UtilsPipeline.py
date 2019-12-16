@@ -96,7 +96,7 @@ def labelencode_collist(df, collist, inplace=True):
     return df, encoder_list
 
 
-def get_onehot_encoded(df, colname, drop_original=True):
+def get_onehot_encoded(df, colname, drop_original=True, **kwargs):
     """
     Returns One Hot Encoded columns appended to the data frame.
     New columns are pre-pended with @colname followed by encoded class label
@@ -111,7 +111,7 @@ def get_onehot_encoded(df, colname, drop_original=True):
         raise ValueError("Column not in Dataframe!")
         return data
     
-    ohe = OneHotEncoder(categorical_features=[0], handle_unknown="ignore")
+    ohe = OneHotEncoder(categorical_features=[0], **kwargs)
     out = ohe.fit_transform(df[colname].values.reshape(-1,1)).toarray()
     # Drop the first column - dummy variable trap
     out = out[:,1:]
@@ -127,7 +127,7 @@ def get_onehot_encoded(df, colname, drop_original=True):
     return df, ohe
 
 
-def onehotencode_collist(df, collist, drop_original=True):
+def onehotencode_collist(df, collist, drop_original=True, **kwargsss):
     """
     Returns One Hot Encoded columns appended to the data frame.
     New columns are pre-pended with @colname followed by encoded class label
@@ -148,6 +148,27 @@ def onehotencode_collist(df, collist, drop_original=True):
     return df, encoder_list
 
 
+def ohe_cols(df, ohe_dict, drop_original=True):
+    """
+    Returns One Hot Encoded columns appended to the data frame.
+    New columns are pre-pended with @colname followed by encoded class label
+    :param df: data frame
+    :param ohe_dict: Dictionary of the form {colname : sklearn.OHEncoder}
+    :param drop_original: if True, drops original column
+    :return: updated dataframe 
+    """
+    for colname, encoder in ohe_dict.items():
+        out = encoder.transform(df[colname].values.reshape(-1,1)).toarray()
+        # Drop the first column - dummy variable trap
+        out = out[:,1:]
+        # Join with the original data frame
+        dfOneHot = pd.DataFrame(out, 
+                                columns=[colname+"_"+str(int(i)) for i in range(out.shape[1])], 
+                                index=df.index)
+        df = pd.concat([df, dfOneHot], axis=1)
+        if drop_original:
+            df.drop(colname, axis=1, inplace=True)
+    return df
 
 # ----------------------------------------------------------------------------------------------------------------------
 # SCALING UTILS
@@ -174,3 +195,15 @@ def scale_collist(df, collist):
         scaler_list[col] = scaler
         
     return df, scaler_list
+
+def scale_df(df, scalers):
+    """
+    Returns scaled columns appended to the data frame.
+    New columns are pre-pended with @colname followed by encoded class label
+    :param df: data frame
+    :param scalers: Dictionary of the form {colname : sklearn.scalers}
+    :return: updated dataframe 
+    """
+    for colname, scaler in scalers.items():
+        df[colname] = scaler.transform(df[colname].values.reshape(-1,1))
+    return df
