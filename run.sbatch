@@ -13,12 +13,10 @@
 
 
 # Load modules:
-# module load Anaconda3/5.0.1 cuda/9.0
-module load Anaconda3/2019.03 cuda/9.0
+module load Anaconda3/5.0.1 cuda/9.0
 
 # Activate conda environment:
-# source activate z11
-source activate tf-gpu-1.14.0
+source activate z11
 
 # GPU-based executable:
 python train_cnn.py -t ./data/train.csv -l ./log.csv -i ./weights/w1.h5 -o ./weights/w1.h5 -e 2 -b 128 -n 10
