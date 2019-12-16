@@ -31,15 +31,13 @@ def cnn_model(input_shape, num_classes):
 
     model.add(Conv2D(filters=64, kernel_size=(3, 3), activation='tanh'))
 
-    # model.add(Dropout(0.25))
-
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
 
     model.add(Conv2D(filters=32, kernel_size=(3, 3), activation='tanh'))
 
     model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    # model.add(Dropout(0.25))
+    model.add(Dropout(0.25))
 
     model.add(Flatten())
 
